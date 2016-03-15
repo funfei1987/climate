@@ -1,4 +1,6 @@
 # climate
+
+[![Join the chat at https://gitter.im/gindeleo/climate](https://badges.gitter.im/gindeleo/climate.svg)](https://gitter.im/gindeleo/climate?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 Data analysis of earth surface temperature
 
 
