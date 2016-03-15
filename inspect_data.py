@@ -5,6 +5,7 @@
 
 import numpy as np
 import pandas as pd
+import scipy as sp
 import matplotlib.pyplot as plt
 import matplotlib
 import seaborn as sns
@@ -20,8 +21,8 @@ temp_global = pd.read_csv('GlobalTemperatures.csv',parse_dates=[0], infer_dateti
 #temp_state = pd.read_csv('GlobalLandTemperaturesByState.csv',parse_dates=[0], infer_datetime_format=True)
 
 #print overview of data
-print temp_global.tail(10)
-print temp_global.describe()
+#print temp_global.tail(10)
+#print temp_global.describe()
 
 #drop NaN from before 1800
 temp_global.dropna(axis=0, inplace=True)
@@ -29,6 +30,15 @@ temp_global.dropna(axis=0, inplace=True)
 #set datetime as index
 temp_global.set_index(temp_global['dt'],inplace=True)
 
-#plot average over 1 year. 
-temp_global.resample('AS').mean().plot()
+#plot average over 1 year.
+
+#for Temps
+temp_global.loc[:,['LandAverageTemperature', 'LandMaxTemperature','LandMinTemperature','LandAndOceanAverageTemperature']].resample('AS').mean().plot(color=['b', 'r','y', 'k'], title = 'Temperatures')
+
+#for Uncertainties
+temp_global.loc[:,['LandAverageTemperatureUncertainty', 'LandMaxTemperatureUncertainty','LandMinTemperatureUncertainty','LandAndOceanAverageTemperatureUncertainty']].resample('AS').mean().plot(color=['b', 'r','y', 'k'], title = 'Temperature Uncertainties')
+
 plt.show()
+
+
+
