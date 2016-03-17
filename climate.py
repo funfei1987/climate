@@ -3,6 +3,11 @@
 #Analysis of earth surface temperature
 #Data from Kaggl.com (originally from Berkeley Earth data page)
 
+import importlib
+import sys
+reload(sys)
+sys.setdefaultencoding('utf8')
+
 import pickle
 import numpy as np
 import pandas as pd
@@ -16,7 +21,7 @@ def linFit(temp):
 	"""perfom linear fit on temperature data for each city"""
 
 	#make series of cities
-	temp_city = temp_major_city['City'].unique()
+	temp_city = temp['City'].unique()
 	slope_array=[]; r_array=[]; p_array=[]; std_array=[]
 
 	for i in xrange(len(temp_city)):
@@ -37,8 +42,28 @@ def linFit(temp):
 	return temp_diff
 
 
+def correl(df,city1, city2):
+    """calculates correlations of AverageTemperature between city1 and city 2 in df"""
+    
+    return(df.loc[df['City'] == city1 ]['AverageTemperature'].corr(df.loc[df['City'] == city2 ]['AverageTemperature']))
+
+def correl_array(temp):
+    """calculates correlations of AverageTemperature between all pairs of cities"""
+    #make series of cities from temp and empty correlation array
+    temp_city = temp['City'].unique()
+    temp_corr_array = []
+    
+    #loop over the cities and calculate their correlations
+    for city1 in temp_city:
+        for city2 in temp_city:
+            temp_corr_array = np.append(temp_corr_array,correl(temp,city1, city2))
+    #reshape and form dataframe with index, columns and len given by series of cities 
+    temp_corr_df = pd.DataFrame(np.reshape(temp_corr_array, (len(temp_city), len(temp_city))),index = temp_city ,columns = temp_city)
+    return temp_corr_df
+
 
 ##########################################################################################
+
 
 #parse data from pickled binary
 with  open('temp_major_city.pkl', 'rb') as handle:
@@ -51,11 +76,19 @@ temp_major_city = temp_major_city[(temp_major_city.index.year >= 1960)]
 temp_major_city = temp_major_city.dropna()
 
 
-#perfom linear regression on all the cities 
+#perfom linear regression on AverageTemperature for all the cities
 temp_diff = linFit(temp_major_city)
 
-print temp_diff
+#calculate correlation of AverageTemperature between all pairs of cities
+temp_corr_df = correl_array(temp_major_city)
+
+
+print temp_diff.head()
 print temp_diff.describe()
+
+print temp_corr_df.head()
+print temp_corr_df.describe()
+
 
 
 #print temp_major_city.loc[temp_major_city['City']=='Abidjan']
