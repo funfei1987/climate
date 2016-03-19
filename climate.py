@@ -5,10 +5,7 @@
 
 import importlib
 import sys
-reload(sys)
-sys.setdefaultencoding('utf8')
 
-import pickle
 import numpy as np
 import pandas as pd
 import scipy as sp
@@ -18,6 +15,7 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.basemap import Basemap
 
 from sklearn.cluster import AgglomerativeClustering
+store = pd.HDFStore('store.h5')
 
 # ******  FUNCTIONS  ******
 
@@ -44,7 +42,6 @@ def linFit(temp):
 	#create DataFrame from results
 	temp_diff =  pd.DataFrame({'City' : temp_city, 'slope' : slope_array, 'r2' : r_array**2 , 'p' : p_array  , 'std_error' : std_array  } )
 	return temp_diff
-
 
 def correl(df,city1, city2):
     """calculates correlations of AverageTemperature between city1 and city 2 in df"""
@@ -87,7 +84,7 @@ def plotWorld(city_location_df, color='bo', markersize=18):
 		lats=np.append(lats,conversion(coord))
 
 	#initialize map
-	map = Basemap(projection='merc',llcrnrlat=-80,urcrnrlat=80,
+	map = Basemap(projection='merc',llcrnrlat=-50,urcrnrlat=70,
 		llcrnrlon=-180,urcrnrlon=180,lat_ts=20,resolution='c')
  
  	#map details
@@ -112,12 +109,28 @@ def conversion(old):
 	return (float(old[:-1])) * direction[old[-1]]
 	
 
+def Fourier(df,city_str):
+	'''perform fourier transform of AverageTemperature of city_str in df '''
+	# form array of temperatures
+	temp_data = df.loc[df['City'] == city_str ]['AverageTemperature'].values
+	# makes power spectrum 
+	ps = np.abs(np.fft.fft(temp_data))**2
+	# define time step - Not sure about this yet
+	time_step = 1./644
+	freqs = np.fft.fftfreq(temp_data.size, time_step)
+	idx = np.argsort(freqs)
+	# returns frequencies and respective power
+	return freqs[idx], ps[idx]
+
+	
 
 ##########################################################################################
 
-#parse data from pickled binary
-with  open('temp_major_city.pkl', 'rb') as handle:
-	temp_major_city = pickle.load(handle)
+
+# temp_major_city = pd.read_csv('GlobalLandTemperaturesByMajorCity.csv',parse_dates=[0], infer_datetime_format=True)
+# store['temp_major_city'] = temp_major_city
+
+temp_major_city = store['temp_major_city']
 
 temp_major_city.set_index(temp_major_city['dt'],inplace=True)
 
@@ -126,44 +139,49 @@ temp_major_city = temp_major_city[(temp_major_city.index.year >= 1960)]
 temp_major_city = temp_major_city.dropna()
 
 
-
-#perfom linear regression on AverageTemperature for all the cities
-temp_diff = linFit(temp_major_city)
-
-#calculate correlation of AverageTemperature between all pairs of cities
-temp_corr_df = correl_array(temp_major_city)
-
-
-#plot crosscorrelation matrix
-# sns.heatmap(temp_corr_df, vmax=1,
-#             square=True, xticklabels=5, yticklabels=5,
-#             linewidths=.5)
-# plt.show()
-
-
-#use ward hierarchical clustering 
-n_clusters=8
-cluster_df=hierarchicalCluster(temp_corr_df, n_clusters)
-
-#plot each cluster in world map with a different color
-colors=['bo', 'go', 'ro', 'co' , 'mo' , 'yo' ,'ko' ,'wo']
-
-for i in xrange(n_clusters):
-	latitude=[]; longitude=[]
-	#get list of cities for each cluster
-	temp_city= cluster_df[cluster_df['Cluster']==i].index
-	
-	#get coordinates for each city
-	for city in temp_city:
-	
-		latitude=np.append(latitude,temp_major_city[temp_major_city['City']==city]['Latitude'].iloc[0])
-		longitude=np.append(longitude,temp_major_city[temp_major_city['City']==city]['Longitude'].iloc[0])
-
-	city_location_df=pd.DataFrame({'City': temp_city , 'Latitude': latitude, 'Longitude' :longitude})
-
-	#print locations onto world map
-	plotWorld(city_location_df, colors[i])
-
+# perform Fourier transform on Taipei
+freqs, ps = Fourier(temp_major_city,'Taipei')
+plt.semilogy(freqs, ps )
 plt.show()
+
+
+# #perfom linear regression on AverageTemperature for all the cities
+# temp_diff = linFit(temp_major_city)
+
+# #calculate correlation of AverageTemperature between all pairs of cities
+# temp_corr_df = correl_array(temp_major_city)
+
+
+# # # plot crosscorrelation matrix
+# # sns.heatmap(temp_corr_df, vmax=1,
+            # # square=True, xticklabels=5, yticklabels=5,
+            # # linewidths=.5)
+# # plt.show()
+
+
+# #use ward hierarchical clustering 
+# n_clusters=8
+# cluster_df=hierarchicalCluster(temp_corr_df, n_clusters)
+
+# #plot each cluster in world map with a different color
+# colors=['bo', 'go', 'ro', 'co' , 'mo' , 'yo' ,'ko' ,'wo']
+
+# for i in xrange(n_clusters):
+	# latitude=[]; longitude=[]
+	# #get list of cities for each cluster
+	# temp_city= cluster_df[cluster_df['Cluster']==i].index
+	
+	# #get coordinates for each city
+	# for city in temp_city:
+	
+		# latitude=np.append(latitude,temp_major_city[temp_major_city['City']==city]['Latitude'].iloc[0])
+		# longitude=np.append(longitude,temp_major_city[temp_major_city['City']==city]['Longitude'].iloc[0])
+
+	# city_location_df=pd.DataFrame({'City': temp_city , 'Latitude': latitude, 'Longitude' :longitude})
+
+	# #print locations onto world map
+	# plotWorld(city_location_df, colors[i])
+
+# plt.show()
 
 
