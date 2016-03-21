@@ -1,0 +1,49 @@
+IndicatorCode	IndicatorName	NumCountries	NumYears	FirstYear	LastYear
+
+'''Who knows'''
+
+VC.IHR.PSRC.P5	Intentional homicides (per 100,000 people)	238	19	1995	2013
+
+'''Agriculture'''
+AG.YLD.CREL.KG	Cereal yield (kg per hectare)	213	53	1961	2013
+AG.LND.PRCP.MM	Average precipitation in depth (mm per year)	190	12	1962	2014
+AG.PRD.CROP.XD	Crop production index (2004-2006 = 100)	231	53	1961	2013
+AG.PRD.FOOD.XD	Food production index (2004-2006 = 100)	233	53	1961	2013
+AG.PRD.LVSK.XD	Livestock production index (2004-2006 = 100)	232	53	1961	2013
+
+'''Agriculture Trade'''
+
+TX.QTY.MRCH.XD.WD	Export volume index (2000 = 100)	199	34	1980	2013
+TX.VAL.AGRI.ZS.UN	Agricultural raw materials exports (% of merchandise exports)	227	53	1962	2014
+TX.VAL.FOOD.ZS.UN	Food exports (% of merchandise exports)	227	53	1962	2014
+
+TM.VAL.AGRI.ZS.UN	Agricultural raw materials imports (% of merchandise imports)	227	53	1962	2014
+TM.VAL.FOOD.ZS.UN	Food imports (% of merchandise imports)	227	53	1962	2014
+
+'''Agriculture Other'''
+
+SL.AGR.0714.FE.ZS	Child employment in agriculture, female (% of female economically active children ages 7-14)	63	16	1998	2013
+SL.AGR.0714.MA.ZS	Child employment in agriculture, male (% of male economically active children ages 7-14)	63	16	1998	2013
+SL.AGR.0714.ZS	Child employment in agriculture (% of economically active children ages 7-14)	62	16	1998	2013
+
+
+NV.AGR.TOTL.CD	Agriculture, value added (current USdollar)	224	55	1960	2014
+NV.AGR.TOTL.CN	Agriculture, value added (current LCU)	193	55	1960	2014
+NV.AGR.TOTL.KD	Agriculture, value added (constant 2005 USdollar)	214	55	1960	2014
+NV.AGR.TOTL.KD.ZG	Agriculture, value added (annual % growth)	216	54	1961	2014
+NV.AGR.TOTL.KN	Agriculture, value added (constant LCU)	185	55	1960	2014
+NV.AGR.TOTL.ZS	Agriculture, value added (% of GDP)
+
+
+'''Tourism'''
+
+ST.INT.ARVL	International tourism, number of arrivals	235	19	1995	2013
+ST.INT.DPRT	International tourism, number of departures	149	19	1995	2013
+ST.INT.RCPT.CD	International tourism, receipts (current USdollar)	232	19	1995	2013
+ST.INT.RCPT.XP.ZS	International tourism, receipts (% of total exports)	214	9	2005	2013
+ST.INT.TRNR.CD	International tourism, receipts for passenger transport items (current USdollar)	187	19	1995	2013
+ST.INT.TRNX.CD	International tourism, expenditures for passenger transport items (current USdollar)	201	19	1995	2013
+ST.INT.TVLR.CD	International tourism, receipts for travel items (current USdollar)	221	19	1995	2013
+ST.INT.TVLX.CD	International tourism, expenditures for travel items (current USdollar)	220	19	1995	2013
+ST.INT.XPND.CD	International tourism, expenditures (current USdollar)	227	19	1995	2013
+ST.INT.XPND.MP.ZS	International tourism, expenditures (% of total imports)	214	9	2005	2013
